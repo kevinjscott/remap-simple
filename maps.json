@@ -1,0 +1,58 @@
+[
+  {
+    "name": "Claim number",
+    "inwidth": 2,
+    "instart": 4,
+    "type": "string",
+    "outwidth": 10,
+    "sourcerow": 1,
+    "padding_position": "end",
+    "padding_symbol": "-"
+  }, {
+    "name": "Convert Me",
+    "inwidth": 3,
+    "instart": 16,
+    "type": "string",
+    "outwidth": 3,
+    "sourcerow": 1,
+    "padding_position": "end",
+    "padding_symbol": "_",
+    "transform": {
+      "lookup": {
+        "1": "2",
+        "ABC": "123",
+        "BC": "88"
+      }
+    }
+  }, {
+    "name": "Constant",
+    "inwidth": 3,
+    "instart": 1,
+    "type": "string",
+    "outwidth": 10,
+    "sourcerow": 1,
+    "padding_position": "end",
+    "padding_symbol": "_",
+    "transform": {
+      "lookup": {
+        "PAY": "!!!###@@@$"
+      }
+    }
+  }, {
+    "name": "First name",
+    "inwidth": 10,
+    "instart": 6,
+    "type": "string",
+    "outwidth": 10,
+    "sourcerow": 1,
+    "padding_position": "end",
+    "padding_symbol": "-",
+    "transform": {
+      "lookup": {
+        "Allison": "Sweet Pea",
+        "ABC": "123",
+        "BC": "88"
+      }
+    }
+  }
+]

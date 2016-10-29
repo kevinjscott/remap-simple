@@ -1,0 +1,14 @@
+{
+  "name": "remap-simple",
+  "version": "1.0.0",
+  "description": "This is a simplified version of remap",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fixy": "^1.0.0"
+  }
+}
