@@ -1,11 +1,35 @@
 fixy = require('fixy');
 fs = require('fs');
+_ = require('lodash');
 
 var row = 'PAY21Allison   ABC';
 var maps = [];
 var inmaps = [];
 var outmaps = [];
 var transforms = [];
+
+var transformfunctions = {
+    lookup: function (input, data) {
+        return data[input] || input;
+    },
+
+    toUpper: function (input, data) {
+        return _.toUpper(input);
+    },
+
+    toLower: function (input, data) {
+        return _.toLower(input);
+    },
+
+    capitalize: function (input, data) {
+        return _.capitalize(input);
+    },
+
+    constant: function (input, data) {
+        return data;
+    }
+};
+
 
 fs.readFile('maps.json', 'utf8', function (err, data) {
     if (err) {
@@ -14,35 +38,38 @@ fs.readFile('maps.json', 'utf8', function (err, data) {
     maps = eval(data);
  
     for (var i = 0; i < maps.length; i++) {
+      var map = maps[i];
+
       inmaps.push(
         {
-          name: maps[i].name,
-          width: maps[i].inwidth,
-          start: maps[i].instart,
-          type: maps[i].type,
-          sourcerow: maps[i].sourcerow
+          name: map.name,
+          width: map.inwidth,
+          start: map.instart,
+          type: map.type,
+          sourcerow: map.sourcerow
         }
       );
 
       outmaps.push(
         {
-          name: maps[i].name,
-          width: maps[i].outwidth,
-          padding_position: maps[i].padding_position,
-          padding_symbol: maps[i].padding_symbol
+          name: map.name,
+          width: map.outwidth,
+          padding_position: map.padding_position,
+          padding_symbol: map.padding_symbol
         }
       );
 
-      if (maps[i].transform) {
+      if (map.transform) {
         transforms.push(
           {
-            transform: maps[i].transform,
-            name: maps[i].name
+            name: map.name,
+            type: map.transform.type,
+            data: map.transform.data
           }
         );
       }
     }
-// console.log(JSON.stringify(transforms, null, 2));
+
     doit();
 });
 
@@ -57,9 +84,10 @@ function doit() {
   }, row);
 
   for (var i = 0; i < transforms.length; i++) {
-    var name = transforms[i].name;
-    var transform = transforms[i].transform;
-    result[0][name] = transform(result[0][name] || 'ERR');
+    var t = transforms[i];
+    var parsedrow = result[0];
+
+    parsedrow[t.name] = transformfunctions[t.type](parsedrow[t.name], t.data);
   }
 
   console.log(JSON.stringify(result, null, 2));

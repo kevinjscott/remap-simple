@@ -17,13 +17,14 @@
     "sourcerow": 1,
     "padding_position": "end",
     "padding_symbol": "_",
-    "transform": function (input) {
-      var lookup = {
+    "transform": {
+      "type": "lookup",
+      "data": {
         "1": "2",
-        "ABC": "123",
+        "abc": "123",
+        "ABC": "!@#",
         "BC": "88"
-      };
-      return lookup[input] || input;
+      }
     }
   }, {
     "name": "Constant",
@@ -34,8 +35,9 @@
     "sourcerow": 1,
     "padding_position": "end",
     "padding_symbol": "_",
-    "transform": function (input) {
-      return "BLAH";
+    "transform": {
+      "type": "constant",
+      "data": "blah"
     }
   }, {
     "name": "First name",
