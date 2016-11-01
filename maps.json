@@ -17,12 +17,13 @@
     "sourcerow": 1,
     "padding_position": "end",
     "padding_symbol": "_",
-    "transform": {
-      "lookup": {
+    "transform": function (input) {
+      var lookup = {
         "1": "2",
         "ABC": "123",
         "BC": "88"
-      }
+      };
+      return lookup[input] || input;
     }
   }, {
     "name": "Constant",
@@ -33,10 +34,8 @@
     "sourcerow": 1,
     "padding_position": "end",
     "padding_symbol": "_",
-    "transform": {
-      "lookup": {
-        "PAY": "!!!###@@@$"
-      }
+    "transform": function (input) {
+      return "BLAH";
     }
   }, {
     "name": "First name",
@@ -46,13 +45,6 @@
     "outwidth": 10,
     "sourcerow": 1,
     "padding_position": "end",
-    "padding_symbol": "-",
-    "transform": {
-      "lookup": {
-        "Allison": "Sweet Pea",
-        "ABC": "123",
-        "BC": "88"
-      }
-    }
+    "padding_symbol": "-"
   }
 ]

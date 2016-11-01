@@ -34,14 +34,12 @@ fs.readFile('maps.json', 'utf8', function (err, data) {
       );
 
       if (maps[i].transform) {
-        if (maps[i].transform.lookup) {
-          transforms.push(
-            {
-              lookup: maps[i].transform.lookup,
-              name: maps[i].name
-            }
-          );
-        }
+        transforms.push(
+          {
+            transform: maps[i].transform,
+            name: maps[i].name
+          }
+        );
       }
     }
 // console.log(JSON.stringify(transforms, null, 2));
@@ -60,10 +58,8 @@ function doit() {
 
   for (var i = 0; i < transforms.length; i++) {
     var name = transforms[i].name;
-    var t = transforms[i].lookup;
-    if (t) {
-      result[0][name] = t[result[0][name]] || 'ERR';
-    }
+    var transform = transforms[i].transform;
+    result[0][name] = transform(result[0][name] || 'ERR');
   }
 
   console.log(JSON.stringify(result, null, 2));
