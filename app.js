@@ -2,11 +2,14 @@ fixy = require('fixy');
 fs = require('fs');
 _ = require('lodash');
 
-var row = 'PAY21Allison   ABC';
+var infile = 'PAY21ALLison   ABC\nPAY21Kev       aaa\nPAY23Audrey    ALS'
+// var row = 'PAY21Allison   ABC';
+var rows = _.split(infile, '\n');
 var maps = [];
 var inmaps = [];
 var outmaps = [];
 var transforms = [];
+var internaldata = [];
 
 var transformfunctions = {
     lookup: function (input, data) {
@@ -29,7 +32,6 @@ var transformfunctions = {
         return data;
     }
 };
-
 
 fs.readFile('maps.json', 'utf8', function (err, data) {
     if (err) {
@@ -70,25 +72,42 @@ fs.readFile('maps.json', 'utf8', function (err, data) {
       }
     }
 
-    doit();
+    internalize();
+    externalize();
 });
 
-function doit() {
-  var result = fixy.parse({
-    map: inmaps,
-    options:{
-      fullwidth: row.length,
-      skiplines: null,
-      format: "json"
+function internalize() {
+  var row = [];
+  for (var j = 0; j < rows.length; j++) {
+    row = rows[j];
+    var result = fixy.parse({
+      map: inmaps,
+      options:{
+        fullwidth: row.length,
+        skiplines: null,
+        format: "json"
+      }
+    }, row);
+
+    for (var i = 0; i < transforms.length; i++) {
+      var t = transforms[i];
+      var parsedrow = result[0];
+
+      result[0][t.name] = transformfunctions[t.type](parsedrow[t.name], t.data);
     }
-  }, row);
 
-  for (var i = 0; i < transforms.length; i++) {
-    var t = transforms[i];
-    var parsedrow = result[0];
-
-    parsedrow[t.name] = transformfunctions[t.type](parsedrow[t.name], t.data);
+    internaldata.push(result[0]);
   }
+  console.log(JSON.stringify(internaldata, null, 2));
+}
 
-  console.log(JSON.stringify(result, null, 2));
+function externalize() {
+  var output = fixy.unparse(outmaps, internaldata);
+  console.log(output);
+
+  fs.writeFile('output.txt', output, function (err) {
+    if (err) return console.log(err);
+    console.log('\nResults saved to output.txt');
+  });
+
 }
