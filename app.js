@@ -1,6 +1,7 @@
 fixy = require('fixy');
 fs = require('fs');
 _ = require('lodash');
+XLSX = require('xlsx');
 
 var infile = 'PAY21ALLison   ABC\nPAY21Kev       aaa\nPAY23Audrey    ALS'
 // var row = 'PAY21Allison   ABC';
@@ -10,6 +11,9 @@ var inmaps = [];
 var outmaps = [];
 var transforms = [];
 var internaldata = [];
+
+var workbook = XLSX.readFile('data.xlsx');
+var xl = XLSX.utils.sheet_to_json(workbook.Sheets["Sheet1"])
 
 var transformfunctions = {
     lookup: function (input, data) {
@@ -30,8 +34,16 @@ var transformfunctions = {
 
     constant: function (input, data) {
         return data;
+    },
+
+    excelLookup: function (input, data) {
+        var o = _.find(xl, [data.lookupfield, input]);
+
+        return o ? o[data.resultfield] : '';
     }
 };
+
+
 
 fs.readFile('maps.json', 'utf8', function (err, data) {
     if (err) {

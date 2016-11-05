@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "fixy": "^1.0.0"
+    "fixy": "^1.0.0",
+    "xlsx": "^0.8.0"
   }
 }

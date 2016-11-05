@@ -1,5 +1,34 @@
 [
   {
+    "name": "padding",
+    "inwidth": 1,
+    "instart": 1,
+    "type": "string",
+    "outwidth": 30,
+    "sourcerow": "0",
+    "padding_position": "end",
+    "padding_symbol": " ",
+    "transform": {
+      "type": "constant",
+      "data": ""
+    }
+  }, {
+    "name": "excel lookup",
+    "inwidth": 3,
+    "instart": 16,
+    "type": "string",
+    "outwidth": 30,
+    "sourcerow": "0",
+    "padding_position": "end",
+    "padding_symbol": "*",
+    "transform": {
+      "type": "excelLookup",
+      "data": {
+        "lookupfield": "Account number",
+        "resultfield": "Look for data here"
+      }
+    }
+  }, {
     "name": "Claim number",
     "inwidth": 2,
     "instart": 4,
