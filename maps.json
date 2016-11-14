@@ -1,17 +1,13 @@
 [
   {
-    "name": "padding",
-    "inwidth": 1,
-    "instart": 1,
+    "name": "Account number",
+    "inwidth": 3,
+    "instart": 16,
     "type": "string",
-    "outwidth": 30,
+    "outwidth": 10,
     "sourcerow": "0",
     "padding_position": "end",
-    "padding_symbol": " ",
-    "transform": {
-      "type": "constant",
-      "data": ""
-    }
+    "padding_symbol": " "
   }, {
     "name": "excel lookup",
     "inwidth": 3,
@@ -26,6 +22,24 @@
       "data": {
         "lookupfield": "Account number",
         "resultfield": "Look for data here"
+      }
+    }
+  }, {
+    "name": "excelLookupProduct",
+    "inwidth": 2,
+    "instart": 4,
+    "type": "float",
+    "outwidth": 5,
+    "sourcerow": "0",
+    "padding_position": "end",
+    "padding_symbol": "^",
+    "transform": {
+      "type": "excelLookupProduct",
+      "data": {
+        "lookupfield": "Account number",
+        "resultfield": "Rate",
+        "varname": "Account number",
+        "decimalplaces": 2
       }
     }
   }, {

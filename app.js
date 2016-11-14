@@ -37,9 +37,17 @@ var transformfunctions = {
     },
 
     excelLookup: function (input, data) {
-        var o = _.find(xl, [data.lookupfield, input]);
+        var matchingrecord = _.find(xl, [data.lookupfield, input]);
 
-        return o ? o[data.resultfield] : '';
+        return matchingrecord ? matchingrecord[data.resultfield] : '';
+    },
+
+    excelLookupProduct: function (input, data, result) {
+      var matchingrecord = _.find(xl, [data.lookupfield, result[data.varname]]);
+      var multiplier = matchingrecord ? matchingrecord[data.resultfield] : 0;
+      var product = multiplier * input;
+
+      return _.ceil(product, data.decimalplaces);
     }
 };
 
@@ -47,7 +55,7 @@ var transformfunctions = {
 
 fs.readFile('maps.json', 'utf8', function (err, data) {
     if (err) {
-        return console.log(err);
+      return console.log(err);
     }
     maps = eval(data);
  
@@ -90,6 +98,7 @@ fs.readFile('maps.json', 'utf8', function (err, data) {
 
 function internalize() {
   var row = [];
+
   for (var j = 0; j < rows.length; j++) {
     row = rows[j];
     var result = fixy.parse({
@@ -105,7 +114,7 @@ function internalize() {
       var t = transforms[i];
       var parsedrow = result[0];
 
-      result[0][t.name] = transformfunctions[t.type](parsedrow[t.name], t.data);
+      result[0][t.name] = transformfunctions[t.type](parsedrow[t.name], t.data, result[0]);
     }
 
     internaldata.push(result[0]);
@@ -114,7 +123,9 @@ function internalize() {
 }
 
 function externalize() {
+  console.log(outmaps);
   var output = fixy.unparse(outmaps, internaldata);
+  output = output.replace(/(\n)/g, '\r\n') + '\r\n';
   console.log(output);
 
   fs.writeFile('output.txt', output, function (err) {
